@@ -81,10 +81,13 @@ __SPOOK_PRIVATE int str_to_uint (
       ++str;
 
       if ( 'b' == *str || 'B' == *str ) {
+        ++str;
         rad = 2;
       } else if ( 'o' == *str || 'O' == *str ) {
+        ++str;
         rad = 8;
       } else if ( 'x' == *str || 'X' == *str ) {
+        ++str;
         rad = 16;
       } else {
         rad = 8;
@@ -95,12 +98,9 @@ __SPOOK_PRIVATE int str_to_uint (
       char * cur = str;
       int    num = 0;
 
-      while ( *cur ) {
-        if ( !isdigit(*cur) )
-          break;
-
+      while ( *cur && isdigit(*cur) ) {
         num *= rad;
-        num += (int)( *cur - '0' );
+        num += (int)( *cur++ - '0' );
       }
 
       if ( 'r' == *cur || 'R' == *cur ) {
@@ -115,7 +115,7 @@ __SPOOK_PRIVATE int str_to_uint (
 
   /* extract the number */
 
-  int       tmp_idx = 0;
+  int       tmp_idx = -1;
   u_qword_t tmp_num = U_QWORD(0);
 
   while ( *str ) {
@@ -128,7 +128,7 @@ __SPOOK_PRIVATE int str_to_uint (
     } else if ( 'a' <= *str && *str <= 'z' ) {
       dig = (int)( *str - 'a' ) + 10;
     } else if ( '_' == *str ) {
-      if ( !tmp_idx )
+      if ( tmp_idx < 0 )
         ERRNO(EINVAL, -3);
 
       tmp_idx = 1;
@@ -181,16 +181,16 @@ __SPOOK_PRIVATE int str_to_sint (
 
   u_qword_t tmp_num;
 
-  int res = str_to_uint(str, endptr, tmp_num);
+  int res = str_to_uint(str, endptr, rad, &tmp_num);
 
   if ( res )
     return res;
 
-  if ( sgn > 0 ) {
+  if ( 0 < sgn ) {
     if ( (u_qword_t)S_QWORD_MAX < tmp_num )
       ERRNO(ERANGE, -5);
   } else {
-    if ( (u_qword_t)S_QWORD_MIN < tmp_num )
+    if ( -(u_qword_t)S_QWORD_MIN < tmp_num )
       ERRNO(ERANGE, -6);
   }
 
@@ -211,7 +211,7 @@ __SPOOK_PUBLIC int spook_str_to_uint (
   if ( !str )
     ERRNO(EINVAL, -1);
 
-  char * cur = str;
+  char * cur = (char *)str;
 
   while ( isspace(*cur) ) {
     ++cur;
@@ -230,7 +230,7 @@ __SPOOK_PUBLIC int spook_str_to_sint (
   if ( !str )
     ERRNO(EINVAL, -1);
 
-  char * cur = str;
+  char * cur = (char *)str;
 
   while ( isspace(*cur) ) {
     ++cur;
@@ -257,7 +257,7 @@ __SPOOK_PUBLIC int spook_str_to_size (
   if ( tmp_endptr && *tmp_endptr ) {
     int  muln = 0;
     char mulc = tmp_endptr[ 0 ];
-    char pow2 = mul ? ( 'i' == tmp_endptr[ 1 ] ) : 0;
+    char pow2 = mulc ? ( 'i' == tmp_endptr[ 1 ] ) : 0;
 
     switch ( mulc ) {
     case 'k': /* /fallthrough/ */
@@ -363,8 +363,11 @@ __SPOOK_PUBLIC int spook_chr_to_str (
   __SPOOK_IN    int    chr
 )
 {
-  if ( !str )
-    ERRNO(EINVAL, -1);
+  static char tmp [ 5 ];
+
+  if ( !str ) {
+    str = tmp;
+  }
 
   static char const hex [] = "0123456789ABCDEF";
 
@@ -398,6 +401,7 @@ __SPOOK_PUBLIC int spook_chr_to_str (
   } break;
   }
 
+  str[ n ] = 0;
   return n;
 }
 

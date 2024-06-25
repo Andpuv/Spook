@@ -1,7 +1,7 @@
 project('Spook', 'c',
   version         : '0.0.1',
   default_options : [
-    'buildtype=debug', 'c_std=c11'
+    'buildtype=debug'
   ]
 )
 
@@ -65,7 +65,8 @@ spook_version_header = configure_file(
 spook_headers_dir = include_directories('src')
 
 spook_sources = [
-  'src/spook-version.c'
+  'src/spook-version.c',
+  'src/spook-common.c'
 ]
 
 spook_lib = shared_library('spook', spook_sources,
@@ -79,9 +80,10 @@ spook_lib = shared_library('spook', spook_sources,
 )
 
 spook_headers = [
-  'src/spook.h',
   spook_config_header,
-  spook_version_header
+  spook_version_header,
+  'src/spook-common.h',
+  'src/spook.h'
 ]
 
 # Build test executables
@@ -95,9 +97,28 @@ test_version_exe = executable('test-version', test_version_sources,
   link_with           : spook_lib
 )
 
+test_common_sources = [
+  'test/common/main.c',
+  'test/common/alloc.c',
+  'test/common/realloc.c',
+  'test/common/dealloc.c',
+  'test/common/str_to_uint.c',
+  'test/common/str_to_sint.c',
+  'test/common/str_to_size.c',
+  'test/common/str_to_chr.c',
+  'test/common/chr_to_str.c',
+  'test/common/str_tok.c'
+]
+
+test_common_exe = executable('test-common', test_common_sources,
+  include_directories : spook_headers_dir,
+  link_with           : spook_lib
+)
+
 # Execute tests
 
-test('basic', test_version_exe)
+test('test-version', test_version_exe)
+test('test-common', test_common_exe)
 
 # Install headers
 

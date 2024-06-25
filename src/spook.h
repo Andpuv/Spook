@@ -47,14 +47,14 @@ typedef  int64_t s_qword_t;
 #   if 4 == __SIZEOF_POINTER__
 #     define __U_ADDR_T   u_dword_t
 #     define __U_SIZE_T   u_dword_t
-#     define __U_ADDR     U_DWORD
-#     define __U_SIZE     U_DWORD
+#     define __U_ADDR(n)  U_DWORD(n)
+#     define __U_SIZE(n)  U_DWORD(n)
 #     define __U_ADDR_MAX U_DWORD_MAX
 #     define __U_SIZE_MAX U_DWORD_MAX
 #     define __S_ADDR_T   s_dword_t
 #     define __S_SIZE_T   s_dword_t
-#     define __S_ADDR     S_DWORD
-#     define __S_SIZE     s_DWORD
+#     define __S_ADDR(n)  S_DWORD(n)
+#     define __S_SIZE(n)  S_DWORD(n)
 #     define __S_ADDR_MIN S_DWORD_MIN
 #     define __S_SIZE_MIN S_DWORD_MIN
 #     define __S_ADDR_MAX S_DWORD_MAX
@@ -62,14 +62,14 @@ typedef  int64_t s_qword_t;
 #   else
 #     define __U_ADDR_T   u_qword_t
 #     define __U_SIZE_T   u_qword_t
-#     define __U_ADDR     U_QWORD
-#     define __U_SIZE     U_QWORD
+#     define __U_ADDR(n)  U_QWORD(n)
+#     define __U_SIZE(n)  U_QWORD(n)
 #     define __U_ADDR_MAX U_QWORD_MAX
 #     define __U_SIZE_MAX U_QWORD_MAX
 #     define __S_ADDR_T   s_qword_t
 #     define __S_SIZE_T   s_qword_t
-#     define __S_ADDR     S_QWORD
-#     define __S_SIZE     s_QWORD
+#     define __S_ADDR(n)  S_QWORD(n)
+#     define __S_SIZE(n)  S_QWORD(n)
 #     define __S_ADDR_MIN S_QWORD_MIN
 #     define __S_SIZE_MIN S_QWORD_MIN
 #     define __S_ADDR_MAX S_QWORD_MAX
@@ -96,21 +96,6 @@ typedef __S_SIZE_T s_size_t;
 
 #   define S_ADDR_MAX __S_ADDR_MAX
 #   define S_SIZE_MAX __S_SIZE_MAX
-
-#   undef __U_ADDR_T
-#   undef __U_SIZE_T
-#   undef __U_ADDR
-#   undef __U_SIZE
-#   undef __U_ADDR_MAX
-#   undef __U_SIZE_MAX
-#   undef __S_ADDR_T
-#   undef __S_SIZE_T
-#   undef __S_ADDR
-#   undef __S_SIZE
-#   undef __S_ADDR_MIN
-#   undef __S_SIZE_MIN
-#   undef __S_ADDR_MAX
-#   undef __S_SIZE_MAX
 
 #   include "spook-version.h"
 #   include "spook-common.h"
