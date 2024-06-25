@@ -1,0 +1,19 @@
+# ifndef __SPOOK_VERSION_H
+#   define __SPOOK_VERSION_H
+
+#   define __SPOOK_VERSIONS      @VERSIONS@
+#   define __SPOOK_VERSION_MAJOR @VERSION_MAJOR@
+#   define __SPOOK_VERSION_MINOR @VERSION_MINOR@
+#   define __SPOOK_VERSION_PATCH @VERSION_PATCH@
+#   define __SPOOK_VERSION              \
+    (                                   \
+      ( __SPOOK_VERSION_MAJOR << 24 ) | \
+      ( __SPOOK_VERSION_MINOR << 16 ) | \
+      ( __SPOOK_VERSION_PATCH <<  0 )   \
+    )
+
+__SPOOK_PUBLIC char const * spook_get_version (
+  void
+);
+
+# endif

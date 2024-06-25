@@ -1,0 +1,31 @@
+# ifndef __SPOOK_CONFIG_H
+#   define __SPOOK_CONFIG_H
+
+#   define __SPOOK_ARCH_IS_X86    @ARCH_IS_X86@
+#   define __SPOOK_ARCH_IS_X86_64 @ARCH_IS_X86_64@
+#   define __SPOOK_ARCH           "@ARCH@"
+#   define __SPOOK_ENDIAN_IS_LE   @ENDIAN_IS_LE@
+#   define __SPOOK_ENDIAN_IS_BE   @ENDIAN_IS_BE@
+#   define __SPOOK_ENDIAN         "@ENDIAN@"
+#   define __SPOOK_OS_IS_LINUX    @OS_IS_LINUX@
+#   define __SPOOK_OS             "@OS@"
+
+#   if !defined(__SIZEOF_POINTER__)
+#     if __SPOOK_ARCH_IS_X86
+#       define __SIZEOF_POINTER__ 4 /* bytes */
+#     elif __SPOOK_ARCH_IS_X86_64
+#       define __SIZEOF_POINTER__ 8 /* bytes */
+#     else
+#       error: cannot configure the size of pointers.
+#     endif
+#   endif
+
+#   if __SPOOK_OS_IS_LINUX
+#     define __SPOOK_PRIVATE @PRIVATE@
+#     define __SPOOK_PROTECT @PROTECT@
+#     define __SPOOK_PUBLIC  @PUBLIC@
+#   else
+#     error: unrecognized OS (Linux-based only).
+#   endif
+
+# endif
