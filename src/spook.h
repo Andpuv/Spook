@@ -113,6 +113,7 @@ typedef __S_SIZE_T s_size_t;
 #   undef __S_SIZE_MAX
 
 #   include "spook-version.h"
+#   include "spook-common.h"
 
 #   define __SPOOK__ __SPOOK_VERSION
 
